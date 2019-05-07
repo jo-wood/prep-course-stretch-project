@@ -15,7 +15,7 @@ if (num === 2) {
 
 }
 
-console.log($( "#root" ).append(newdiv));
+console.log($( "#chart" ).append(newdiv));
 
 
 }

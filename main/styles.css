@@ -1,24 +1,56 @@
 body{
-  margin: 5% auto;
-  max-width: 1000px;
   background: #FFEBCD;
+  max-width:80%;
+  margin:1% auto;
+  font-size:.5em;
+  color:grey;
 }
 
 div#root{
+  min-width:40%;
+  min-height:40%;
   background: #F8F8FF;
-  padding: 2%;
+  padding: 1%;
   border-radius: 5%;
+  float:left;
 }
 
-div{
-  font-size: 1.5em;
-  font-weight: bold;
-  text-indent:2%;
+h1 {
+  min-width: 100%;
+  color:dimGrey;
+  text-align: center;
 }
+
+#yaxis {
+  max-width: 20%;
+  float:left;
+  text-align: left;
+  transform: rotate(-90deg);
+}
+
+#chart {
+  min-width:80%;
+  min-height:50%;
+  float: left;
+  border-left: solid thin grey;
+  border-bottom: solid thin grey;
+
+}
+
+#xaxis {
+  min-width: 100%;
+  text-align: center;
+  float:left;
+}
+
 
 .bar-num{
   color: orange;
   background-color: tomato ;
-  height: 20%;
   margin: 1px;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-indent:2%;
+    text-align: center;
+    float:left;
 }
