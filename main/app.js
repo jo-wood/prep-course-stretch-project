@@ -8,6 +8,13 @@ for (let num of data) {
     $(newdiv).append(num);
     $(newdiv).addClass("bar-num");
 
+if (num === 2) {
+  let newwidth = 200 + "px";
+  console.log(newwidth);
+  $(newdiv).css({"margin-right" : "$(newwidth)"});
+
+}
+
 console.log($( "#root" ).append(newdiv));
 
 
