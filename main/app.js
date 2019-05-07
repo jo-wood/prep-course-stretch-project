@@ -4,12 +4,11 @@
 function drawBarChart(data, options, element){
 
 for (let num of data) {
-  var newdiv = document.createElement( "div" ),
-    existingdiv1 = document.getElementById( "root" );
-
+  var newdiv = document.createElement( "div" );
     $(newdiv).append(num);
+    $(newdiv).addClass("bar-num");
 
-console.log($( "body" ).append([ newdiv, existingdiv1 ]));
+console.log($( "#root" ).append(newdiv));
 
 
 }

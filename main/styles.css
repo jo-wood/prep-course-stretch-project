@@ -1,7 +1,21 @@
-#root{
-  color:red;
+body{
+  margin: 5% auto;
+  max-width: 1000px;
+  background: #FFEBCD;
 }
 
-.test{
-  color:blue;
+div#root{
+  background: #F8F8FF;
+  padding: 2%;
+}
+
+.bar-num{
+  color:purple;
+  background-color: orange ;
+  align-items: center;
+  padding: 1%;
+  margin: 1px;
+  border-style:solid;
+  border-width: 0.5px;
+  border-color:grey;
 }
