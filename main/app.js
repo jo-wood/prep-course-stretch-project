@@ -26,7 +26,7 @@ console.log($( "#chart" ).append(newdiv));
 
 } //drawBarChart
 
-drawBarChart([1, 2, 3, 4, 5]);
+drawBarChart([1, 4, 2, 4, 6]);
 
 // ie data = [1, 2, 3, 4, 5]
 // ie options should be object for options of chart (width, height of chart)
