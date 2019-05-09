@@ -3,11 +3,17 @@
 
 function drawBarChart(data, options, element){
 
-for (let num of data) {
+
+let revData = data.reverse(); // bc flipped in css for styling
+
+/** separate each data entry into own bar:**/
+for (let num of revData) {
   var newdiv = document.createElement( "div" );
     $(newdiv).append(num);
     $(newdiv).addClass("bar-num");
+    //$(newdiv).attr(".bar-num", num);
 
+/** create each bars size based on entry value **/
   let newheight = num*10 + "%";
   $(newdiv).css("height" , newheight);
 

@@ -1,6 +1,6 @@
 body{
   background: #FFEBCD;
-  max-width:50%;
+  max-width:80%;
   margin:2% auto;
   font-size:.5em;
   color:grey;
@@ -25,7 +25,7 @@ h1 {
   text-align: left;
   transform: rotate(-90deg);
   z-index: -1;
-  margin-left:-80%;
+  margin-left:-90%;
   margin-top:-80%;
 
 }
