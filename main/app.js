@@ -1,14 +1,13 @@
 /*jshint esversion:6*/
 
-/******************** create chart from data *************************/
-//
-//
-//
+/////////////////////////////////////////////////////////////////
+/*********************** helper fns ****************************/
+/////////////////////////////////////////////////////////////////
+
+/***************** create chart from data **********************/
 
 function setup(data) {
-  let chart = document.createElement('div');
-  $(chart).attr('id', 'chart');
-
+  let buildChart = document.createElement('div');
   let revData = data.reverse(); // bc flipped in css for styling
   let barMargins = 100 - data.length;
 
@@ -27,39 +26,66 @@ function setup(data) {
     let newheight = num*10 + "%";
     $(newdiv).css("height" , newheight);
 
-$(chart).append(newdiv);
+$(buildChart).append(newdiv);
 
 } //end for loop of data entries
 
-return chart;
-}
+return buildChart;
+} //fn setup
 
-/******************** run final drawBarChart *************************/
-//
-//
-//
+
+
+
+/*************** customize the chart with options **************/
+
+function customize({options}) {
+
+
+return;
+} //fn customize
+
+
+
+/////////////////////////////////////////////////////////////////
+/*********************** main function *************************/
+/////////////////////////////////////////////////////////////////
 
 function drawBarChart(input, options, element){
 
-/********* create chart from data **********/
-  let createChart = setup(input);
+/* create chart from data at element location */
 
-  let yaxis = document.getElementById("yaxis");
+  let chart = setup(input);
+    $(chart).attr('id', 'chart');
+  console.log(element.insertAdjacentElement("afterend", chart));
 
+/* allow chart customization */
 
-  console.log(yaxis.insertAdjacentElement("afterend", createChart));
-
-
+customize(options);
 
 } //fn drawBarChart
 
-drawBarChart([1, 4, 2, 10, 6, 5]);
 
 
+/****************** run drawBarChart with inputs *******************/
+
+let custom = {
+  title: {
+      titleColor: null,
+      titleFont: null,
+      titleName: null
+    },
+  chart: {
+      width: null,
+      height: null,
+      axesX: null,
+      axesY: null
+    },
+  bars: {
+      barColor: null,
+      labelColour: null,
+      barSpace: null,
+      labelLocation: null
+}};
 
 
-
-
-// ie data = [1, 2, 3, 4, 5]
-// ie options should be object for options of chart (width, height of chart)
-// ie element should be DOM element or Jquery element that the chart will get rendered into
+drawBarChart([1, 4, 2, 10, 6, 5], custom, document.getElementById("yaxis"));
