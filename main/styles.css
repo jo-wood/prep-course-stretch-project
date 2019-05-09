@@ -21,19 +21,11 @@ h1 {
   text-align: center;
 }
 
-#yaxis {
-  text-align: left;
-  transform: rotate(-90deg);
-  z-index: -1;
-  margin-left:-90%;
-  margin-top:-80%;
-
-}
-
 #chart {
   margin-left:12%;
   padding-bottom:5%;
   padding-left:5%;
+  padding-right:1%;
   min-width:80%;
   float: left;
   border-right: solid thin grey;
@@ -42,16 +34,8 @@ h1 {
   margin-top: 5%;
 }
 
-#xaxis {
-  min-width: 100%;
-  text-align: center;
-  float:left;
-}
-
-
 .bar-num{
   color: orange;
-  width: 18%;
   background-color: tomato ;
   margin-left: 1%;
   font-size: 1.5em;
@@ -61,3 +45,17 @@ h1 {
   float:left;
   transform: rotate(180deg);
   }
+
+#xaxis {
+  min-width: 100%;
+  text-align: center;
+  float:left;
+}
+
+#yaxis {
+  text-align: left;
+  transform: rotate(-90deg);
+  z-index: -1;
+  margin-left:-90%;
+  margin-top:-80%;
+}
