@@ -26,9 +26,9 @@ function setup(data) {
     let newheight = num*10 + "%";
     $(newdiv).css("height" , newheight);
 
-$(buildChart).append(newdiv);
+    $(buildChart).append(newdiv);
 
-} //end for loop of data entries
+  } //end for loop of data entries
 
 return buildChart;
 } //fn setup
@@ -38,7 +38,35 @@ return buildChart;
 
 /*************** customize the chart with options **************/
 
-function customize({options}) {
+function customize(changes) {
+
+  /* bar specifc customizations */
+  let labels = $('div.bar-num').map(function() {
+    //label colour:
+    $(this).css('color', changes.bars.labelColour);
+
+    //label position:
+    $(this).map(function() {
+      console.log(this);
+      let top = this.clientHeight;
+      let center = top/2;
+      let bottom = 0;
+      if (changes.bars.labelLocation === "center") {
+        $(this).clientHeight = center;
+      } else if (changes.bars.labelLocation === "bottom"){
+        $(this).clientHeight = bottom;
+        }
+console.log(changes.bars.labelLocation, this.clientHeight);
+    });
+
+
+
+
+    return;
+  });
+
+
+
 
 
 return;
@@ -50,17 +78,15 @@ return;
 /*********************** main function *************************/
 /////////////////////////////////////////////////////////////////
 
-function drawBarChart(input, options, element){
+function drawBarChart(dataSet, options, element){
 
-/* create chart from data at element location */
-
-  let chart = setup(input);
-    $(chart).attr('id', 'chart');
+  /* create chart from data at element location */
+  let chart = setup(dataSet);
+  $(chart).attr('id', 'chart');
   console.log(element.insertAdjacentElement("afterend", chart));
 
-/* allow chart customization */
-
-customize(options);
+  /* allow chart customization */
+  customize(options);
 
 } //fn drawBarChart
 
@@ -82,9 +108,9 @@ let custom = {
     },
   bars: {
       barColor: null,
-      labelColour: null,
+      labelColour: "SlateBlue",
       barSpace: null,
-      labelLocation: null
+      labelLocation: "bottom"
 }};
 
 
