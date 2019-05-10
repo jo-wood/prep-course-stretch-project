@@ -35,16 +35,21 @@ h1 {
 }
 
 .bar-num{
-  color: orange;
   background-color: tomato ;
   margin-left: 1%;
-  font-size: 1.5em;
-  font-weight: bold;
-  text-indent:2%;
-  text-align: center;
   float:left;
   transform: rotate(180deg);
   }
+
+  .bar-num p{
+    color: orange;
+    margin: 2% auto;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    z-index: 1;
+  }
+
 
 #xaxis {
   min-width: 100%;

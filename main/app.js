@@ -13,8 +13,9 @@ function setup(data) {
 
   /** add bars **/
   for (let num of data) {
+    let dataLabel = "<p>" + num + "</p>";
     var newdiv = document.createElement( "div" );
-      $(newdiv).append(num);
+      $(newdiv).append(dataLabel);
       $(newdiv).addClass("bar-num");
       $('.bar-num:last').attr('id', num);
 
@@ -43,20 +44,18 @@ function customize(changes) {
   /* bar specifc customizations */
   let labels = $('div.bar-num').map(function() {
     //label colour:
-    $(this).css('color', changes.bars.labelColour);
+    $(this.children[0]).css('color', changes.bars.labelColour);
 
     //label position:
-    $(this).map(function() {
-      console.log(this);
-      let top = this.clientHeight;
-      let center = top/2;
-      let bottom = 0;
+    $(this.children[0]).map(function() {
+      let top = this.offsetHeight;
+      let center = this.offsetParent.offsetHeight/2 - top;
+      let bottom = this.offsetParent.offsetHeight - top;
       if (changes.bars.labelLocation === "center") {
-        $(this).clientHeight = center;
+        $(this).css('margin-top', center);
       } else if (changes.bars.labelLocation === "bottom"){
-        $(this).clientHeight = bottom;
+        $(this).css('margin-top', bottom);
         }
-console.log(changes.bars.labelLocation, this.clientHeight);
     });
 
 
@@ -110,7 +109,7 @@ let custom = {
       barColor: null,
       labelColour: "SlateBlue",
       barSpace: null,
-      labelLocation: "bottom"
+      labelLocation: "center"
 }};
 
 
