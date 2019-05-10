@@ -22,8 +22,8 @@ h1 {
 }
 
 #chart {
-  padding: 0 2%;
-  min-width:96%;
+  padding-left: 2%;
+  width:100%;
   float: left;
   border-right: solid thin grey;
   border-top: solid thin grey;
@@ -37,14 +37,14 @@ h1 {
   transform: rotate(180deg);
   }
 
-  .bar-num p{
-    color: orange;
-    margin: 2% auto;
-    font-size: 1.5em;
-    font-weight: bold;
-    text-align: center;
-    z-index: 1;
-  }
+.bar-num p{
+  color: orange;
+  margin: 2% auto;
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: center;
+  z-index: 1;
+}
 
 
 #xaxis {

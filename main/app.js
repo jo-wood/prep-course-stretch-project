@@ -4,12 +4,18 @@
 /*********************** helper fns ****************************/
 /////////////////////////////////////////////////////////////////
 
+/*  global scopes:  */
+
+let barFraction;
+let barWidth;
+
 /***************** create chart from data **********************/
 
 function setup(data) {
   let buildChart = document.createElement('div');
   let revData = data.reverse(); // bc flipped in css for styling
-  let barMargins = 100 - data.length;
+
+  barFraction = (100 - data.length) / data.length;
 
   /** add bars **/
   for (let num of data) {
@@ -20,8 +26,8 @@ function setup(data) {
       $('.bar-num:last').attr('id', num);
 
   /** set bar widths **/
-    let barWidth = Math.floor(barMargins/data.length) + "%";
-      $(newdiv).css("width", barWidth); // bar width same for all
+  barWidth = Math.floor(barFraction) + "%";
+  $(newdiv).css("width", barWidth); // bar width same for all
 
   /** create each bars height based on entry value **/
     let newheight = num*10 + "%";
@@ -43,6 +49,16 @@ function customize(changes) {
 
   /* bar specifc customizations */
   let labels = $('div.bar-num').map(function() {
+
+    //bar color:
+    $(this).css('background-color', changes.bars.barColor);
+
+    //bar space:
+    let newMargin = changes.bars.barSpace + "%";
+    barWidth = barFraction - changes.bars.barSpace + "%";
+    $(this).css('width', barWidth);
+    $(this).css('margin-left', newMargin);
+
     //label colour:
     $(this.children[0]).css('color', changes.bars.labelColour);
 
@@ -51,6 +67,7 @@ function customize(changes) {
       let top = this.offsetHeight;
       let center = this.offsetParent.offsetHeight/2 - top;
       let bottom = this.offsetParent.offsetHeight - top;
+
       if (changes.bars.labelLocation === "center") {
         $(this).css('margin-top', center);
       } else if (changes.bars.labelLocation === "bottom"){
@@ -106,9 +123,9 @@ let custom = {
       axesY: null
     },
   bars: {
-      barColor: null,
-      labelColour: "Aquamarine",
-      barSpace: null,
+      barColor: "orange",
+      labelColour: "tomato",
+      barSpace: 3,
       labelLocation: "center"
 }};
 
