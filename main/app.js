@@ -82,7 +82,7 @@ function drawBarChart(dataSet, options, element){
   /* create chart from data at element location */
   let chart = setup(dataSet);
   $(chart).attr('id', 'chart');
-  console.log(element.insertAdjacentElement("afterend", chart));
+  console.log(element.append(chart));
 
   /* allow chart customization */
   customize(options);
@@ -107,10 +107,10 @@ let custom = {
     },
   bars: {
       barColor: null,
-      labelColour: "SlateBlue",
+      labelColour: "Aquamarine",
       barSpace: null,
       labelLocation: "center"
 }};
 
 
-drawBarChart([1, 4, 2, 10, 6, 5], custom, document.getElementById("yaxis"));
+drawBarChart([1, 4, 2, 10, 6, 5], custom, document.getElementById("root"));
