@@ -130,8 +130,16 @@ function drawBarChart(dataSet, options, element){
   $(element).before("<h2 id='yaxis'>y Axis</h2>");
   $('#yaxis').css('float', "left");
 
-console.log($('#yaxis')[0]);
-  //console.log($(yaxis).offsetHeight = ($($(yaxis).after()).offsetHeight) / 2);
+
+
+  function adjustYAxis(chartCenter){
+    console.log($('#yaxis'));
+    //let chartCenter = ($(element.offsetHeight)[0]) /2 ;
+    //let yaxis = $(('#yaxis').offsetHeight);
+    console.log(chartCenter);
+  }
+  adjustYAxis(($(element.offsetHeight)[0]) /2);
+
 
 
 
