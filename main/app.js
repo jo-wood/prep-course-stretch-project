@@ -47,12 +47,23 @@ return buildChart;
 
 function customize(changes) {
 
-  /* title specifc customizations */
+  /*** TITLE specifc customizations ***/
   $('#title').replaceWith("<h1 id='title'>" + changes.title.titleName + "<h1/>" );
+    //original h1 not getting removed?
   $('#title').css('color', changes.title.titleColor);
   $('#title').css('font-family', changes.title.titleFont);
 
-  /* bar specifc customizations */
+  /*** CHART specifc customizations ***/
+  $('#chart').css('width', changes.chart.width);
+  $('#root').css('width',  changes.chart.width);
+
+  function chartHeight(newHeight){
+    $('#chart').css('height', newHeight);
+    $('#root').css('height', newHeight);
+  }
+
+
+  /*** BAR specifc customizations ***/
   let labels = $('div.bar-num').map(function() {
 
     //bar color:
@@ -68,22 +79,30 @@ function customize(changes) {
     $(this.children[0]).css('color', changes.bars.labelColour);
 
     //label position:
-    $(this.children[0]).map(function() {
-      let top = this.offsetHeight;
-      let center = this.offsetParent.offsetHeight/2 - top;
-      let bottom = this.offsetParent.offsetHeight - top;
+      function adjustBarLabels(barDiv){
+        barDiv.map(function() {
+          let top = this.offsetHeight;
+          let center = this.offsetParent.offsetHeight/2 - top;
+          let bottom = this.offsetParent.offsetHeight - top;
 
-      if (changes.bars.labelLocation === "center") {
-        $(this).css('margin-top', center);
-      } else if (changes.bars.labelLocation === "bottom"){
-        $(this).css('margin-top', bottom);
-        }
-    });
-    return;
-  });// fn labels
+          if (changes.bars.labelLocation === "center") {
+            $(this).css('margin-top', Math.abs(center));
+          } else if (changes.bars.labelLocation === "bottom"){
+            $(this).css('margin-top', Math.abs(bottom));
+            }
+        });
+        return;
+      }
+
+    if(changes.chart.height === null){
+      adjustBarLabels($(this.children[0]));
+    } else {
+      chartHeight(changes.chart.height);
+      adjustBarLabels($(this.children[0]));
+      }
 
 
-
+});// fn labels
 
 
 return;
@@ -118,8 +137,8 @@ let custom = {
       titleName: "My Custom Bar Chart:"
     },
   chart: {
-      width: null,
-      height: null,
+      width: 200,
+      height: 200,
       axesX: null,
       axesY: null
     },

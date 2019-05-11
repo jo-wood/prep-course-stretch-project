@@ -1,6 +1,6 @@
 body{
   background: #FFEBCD;
-  max-width:80%;
+  max-width: 96%;
   margin:2% auto;
   font-size:.5em;
   color:grey;
@@ -12,11 +12,10 @@ div#root{
   margin: 1% auto;
   background: #F8F8FF;
   border-radius: 5%;
-    float:left;
 }
 
 h1 {
-  min-width: 100%;
+  width: 100%;
   color:dimGrey;
   text-align: center;
 }
