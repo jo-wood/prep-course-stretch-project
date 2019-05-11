@@ -47,6 +47,11 @@ return buildChart;
 
 function customize(changes) {
 
+  /* title specifc customizations */
+  $('#title').replaceWith("<h1 id='title'>" + changes.title.titleName + "<h1/>" );
+  $('#title').css('color', changes.title.titleColor);
+  $('#title').css('font-family', changes.title.titleFont);
+
   /* bar specifc customizations */
   let labels = $('div.bar-num').map(function() {
 
@@ -74,12 +79,8 @@ function customize(changes) {
         $(this).css('margin-top', bottom);
         }
     });
-
-
-
-
     return;
-  });
+  });// fn labels
 
 
 
@@ -112,9 +113,9 @@ function drawBarChart(dataSet, options, element){
 
 let custom = {
   title: {
-      titleColor: null,
-      titleFont: null,
-      titleName: null
+      titleColor: "coral",
+      titleFont: "courier",
+      titleName: "My Custom Bar Chart:"
     },
   chart: {
       width: null,
