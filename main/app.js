@@ -119,10 +119,23 @@ function drawBarChart(dataSet, options, element){
   /* create chart from data at element location */
   let chart = setup(dataSet);
   $(chart).attr('id', 'chart');
-  console.log(element.append(chart));
+  $(element).append(chart);
 
   /* allow chart customization */
   customize(options);
+
+  /* add x and y axes relative to added chart */
+  $(element).append("<h2 id='xaxis'>x Axis</h2>");
+
+  $(element).before("<h2 id='yaxis'>y Axis</h2>");
+  $('#yaxis').css('float', "left");
+
+console.log($('#yaxis')[0]);
+  //console.log($(yaxis).offsetHeight = ($($(yaxis).after()).offsetHeight) / 2);
+
+
+
+
 
 } //fn drawBarChart
 

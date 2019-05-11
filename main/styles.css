@@ -55,7 +55,4 @@ h1 {
 #yaxis {
   text-align: left;
   transform: rotate(-90deg);
-  z-index: -1;
-  margin-left:-90%;
-  margin-top:-80%;
 }
