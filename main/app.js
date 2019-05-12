@@ -109,7 +109,6 @@ return;
 } //fn customize
 
 
-
 /////////////////////////////////////////////////////////////////
 /*********************** main function *************************/
 /////////////////////////////////////////////////////////////////
@@ -120,28 +119,22 @@ function drawBarChart(dataSet, options, element){
   let chart = setup(dataSet);
   $(chart).attr('id', 'chart');
   $(element).append(chart);
+  $(element).addClass('wrap-chart');
 
   /* allow chart customization */
-  customize(options);
+  if(options !== null){
+    customize(options);
+  }
+
 
   /* add x and y axes relative to added chart */
-  $(element).append("<h2 id='xaxis'>x Axis</h2>");
+  $('body').append("<h2 id='xaxis'>x Axis</h2>");
 
   $(element).before("<h2 id='yaxis'>y Axis</h2>");
+  $('#yaxis').addClass('wrap-chart');
   $('#yaxis').css('float', "left");
 
-
-
-  function adjustYAxis(chartCenter){
-    console.log($('#yaxis'));
-    //let chartCenter = ($(element.offsetHeight)[0]) /2 ;
-    //let yaxis = $(('#yaxis').offsetHeight);
-    console.log(chartCenter);
-  }
-  adjustYAxis(($(element.offsetHeight)[0]) /2);
-
-
-
+  $('.wrap-chart').wrapAll("<div class='chart-wrapper' />");
 
 
 
@@ -172,3 +165,5 @@ let custom = {
 
 
 drawBarChart([1, 4, 2, 10, 6, 5], custom, document.getElementById("root"));
+
+//drawBarChart([1, 4, 2, 10, 6, 5], null, document.getElementById("root"));
