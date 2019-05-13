@@ -68,8 +68,10 @@ $("#root").append(xAxisLabels);
 $('.xlabel').innerWidth(Math.ceil(barFraction) + "%");
 
 //center xlabel div along with any chart's padding
-if (option.chart.width !== null){
+if (option !== null && option.chart.width !== null){
   $(axesLabels).css("width", option.chart.width);
+  $(axesLabels).css("padding", $('#chart').css("padding"));
+} else {
   $(axesLabels).css("padding", $('#chart').css("padding"));
 }
 
@@ -202,7 +204,7 @@ let custom = {
 
 
 /*** UNIT TEST with no customizations passed ***/
-//drawBarChart([1, 4, 2, 10, 6, 5], null, document.getElementById("root"));
+drawBarChart([1, 4, 2, 10, 6, 5], null, document.getElementById("root"));
 
 /*** UNIT TEST with custom options ***/
-drawBarChart([1, 4, 2, 10, 6, 5], custom, document.getElementById("root"));
+//drawBarChart([1, 4, 2, 10, 6, 5], custom, document.getElementById("root"));
