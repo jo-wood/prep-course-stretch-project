@@ -25,7 +25,7 @@ function setup(data) {
     var newdiv = document.createElement( "div" );
       $(newdiv).append(dataLabel);
       $(newdiv).addClass("bar-num");
-      $('.bar-num:last').attr('id', num);
+      $(newdiv).attr('id', num);
 
     let dataIndex = correctDataOrder.indexOf(num);
     Object.keys(xlabels[num] = "Index:" + dataIndex);
@@ -45,6 +45,40 @@ function setup(data) {
 return buildChart;
 } //fn setup
 
+
+/***************** create y and x axis **********************/
+
+function axesSetup(data, option, chartRoot){
+
+  let rootHeight = $('#root')[0].offsetHeight; // account for ~10% as text height
+
+/**x axis and xlabels **/
+  $('body').append("<h2 id='xaxis'>x Axis</h2>");
+  for(let z = 0; z < data.length; z++){
+    let storeValue = data[z];
+    let findValue = "#" + storeValue;
+    $(findValue).append("<p id=xlabel>" + xlabels[storeValue] + "</p>");
+    let moveXlabel = $(findValue)[0].children[1];
+
+    if (option.bars.labelLocation === "top"){
+      $(moveXlabel).css("margin-top", rootHeight);
+    } else if (option.bars.labelLocation === "center"){
+      $(moveXlabel).css("margin-top", rootHeight/2);
+    }
+  }//data for loop
+
+
+/** y axis  **/
+  $(chartRoot).before("<h2 id='yaxis'>y Axis</h2>"); // to set left of chart
+  $('#yaxis').addClass('wrap-chart');
+  $('#yaxis').css('float', "left");
+
+/** keep y axis relative to root **/
+$('.wrap-chart').wrapAll("<div class='chart-wrapper' />");
+
+
+return;
+} //fn axesSetup
 
 /*************** customize the chart with options **************/
 
@@ -131,15 +165,8 @@ function drawBarChart(dataSet, options, element){
 
 
   /* add x and y axes relative to added chart */
-  $('body').append("<h2 id='xaxis'>x Axis</h2>");
+  axesSetup(dataSet, options, element);
 
-  $("#root").append("")
-
-  $(element).before("<h2 id='yaxis'>y Axis</h2>");
-  $('#yaxis').addClass('wrap-chart');
-  $('#yaxis').css('float', "left");
-
-  $('.wrap-chart').wrapAll("<div class='chart-wrapper' />");
 
 
 

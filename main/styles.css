@@ -57,6 +57,12 @@ h1 {
   text-align: center;
 }
 
+#xlabel {
+  color:grey;
+  font-size: 0.75em;
+  transform: rotate(-45deg);
+}
+
 #yaxis {
   width:10%;
   align-self:center;
