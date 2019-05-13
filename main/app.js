@@ -54,19 +54,24 @@ function axesSetup(data, option, chartRoot){
 
 /**x axis and xlabels **/
   $('body').append("<h2 id='xaxis'>x Axis</h2>");
-  for(let z = 0; z < data.length; z++){
-    let storeValue = data[z];
-    let findValue = "#" + storeValue;
-    $(findValue).append("<p id=xlabel>" + xlabels[storeValue] + "</p>");
-    let moveXlabel = $(findValue)[0].children[1];
 
-    if (option.bars.labelLocation === "top"){
-      $(moveXlabel).css("margin-top", rootHeight);
-    } else if (option.bars.labelLocation === "center"){
-      $(moveXlabel).css("margin-top", rootHeight/2);
-    }
+  let xAxisLabels = document.createElement('div');
+  $(xAxisLabels).attr("id", "axesLabels");
+
+  for(let z = data.length - 1; z >= 0; z--){
+    let storeValue = data[z];
+    let xlabelId = 'dataValue-' + storeValue;
+    $(xAxisLabels).append("<p class='xlabel' id='" + xlabelId + "'>" + xlabels[storeValue] + "</p>");
   }//data for loop
 
+$("#root").append(xAxisLabels);
+$('.xlabel').innerWidth(Math.ceil(barFraction) + "%");
+
+//center xlabel div along with any chart's padding
+if (option.chart.width !== null){
+  $(axesLabels).css("width", option.chart.width);
+  $(axesLabels).css("padding", $('#chart').css("padding"));
+}
 
 /** y axis  **/
   $(chartRoot).before("<h2 id='yaxis'>y Axis</h2>"); // to set left of chart

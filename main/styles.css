@@ -57,9 +57,15 @@ h1 {
   text-align: center;
 }
 
-#xlabel {
+#axesLabels {
+  width:100%;
+}
+
+p.xlabel{
   color:grey;
   font-size: 0.75em;
+  float:left;
+  text-align:center;
   transform: rotate(-45deg);
 }
 
