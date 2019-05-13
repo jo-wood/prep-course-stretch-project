@@ -8,10 +8,12 @@
 
 let barFraction;
 let barWidth;
+let xlabels = {};
 
 /***************** create chart from data **********************/
 
 function setup(data) {
+  let correctDataOrder = data.slice(); //store data without mutating
   let buildChart = document.createElement('div');
   let revData = data.reverse(); // bc flipped in css for styling
 
@@ -25,13 +27,16 @@ function setup(data) {
       $(newdiv).addClass("bar-num");
       $('.bar-num:last').attr('id', num);
 
-  /** set bar widths **/
-  barWidth = Math.floor(barFraction) + "%";
-  $(newdiv).css("width", barWidth); // bar width same for all
+    let dataIndex = correctDataOrder.indexOf(num);
+    Object.keys(xlabels[num] = "Index:" + dataIndex);
 
-  /** create each bars height based on entry value **/
-    let newheight = num*10 + "%";
-    $(newdiv).css("height" , newheight);
+    /** set bar widths **/
+      barWidth = Math.floor(barFraction) + "%";
+      $(newdiv).css("width", barWidth); // bar width same for all
+
+    /** create each bars height based on entry value **/
+      let newheight = num*10 + "%";
+      $(newdiv).css("height" , newheight);
 
     $(buildChart).append(newdiv);
 
@@ -39,8 +44,6 @@ function setup(data) {
 
 return buildChart;
 } //fn setup
-
-
 
 
 /*************** customize the chart with options **************/
@@ -130,6 +133,8 @@ function drawBarChart(dataSet, options, element){
   /* add x and y axes relative to added chart */
   $('body').append("<h2 id='xaxis'>x Axis</h2>");
 
+  $("#root").append("")
+
   $(element).before("<h2 id='yaxis'>y Axis</h2>");
   $('#yaxis').addClass('wrap-chart');
   $('#yaxis').css('float', "left");
@@ -164,6 +169,8 @@ let custom = {
 }};
 
 
-drawBarChart([1, 4, 2, 10, 6, 5], custom, document.getElementById("root"));
-
+/*** UNIT TEST with no customizations passed ***/
 //drawBarChart([1, 4, 2, 10, 6, 5], null, document.getElementById("root"));
+
+/*** UNIT TEST with custom options ***/
+drawBarChart([1, 4, 2, 10, 6, 5], custom, document.getElementById("root"));
