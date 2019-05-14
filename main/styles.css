@@ -7,7 +7,7 @@ body{
 }
 
 div#root{
-  width:90%;
+  width:94%;
   padding: 6%;
   background: #F8F8FF;
   border-radius: 5%;
@@ -19,12 +19,16 @@ h1 {
   text-align:center;
 }
 
+.chartWithY {
+  margin: 0 auto;
+  min-width: 96%;
+  float:left;
+  padding: 0 2%;
+}
+
 .chart-wrapper {
   float:left;
-  width:90%;
-  margin-left:-10%;
-  display: flex;
-  justify-content: center;
+  max-width:90%;
 }
 
 #chart {
@@ -72,10 +76,9 @@ p.xlabel{
 }
 
 #yaxis {
-  width:10%;
+  min-width:10%;
   float:left;
-  margin-left:5%;
-  transform: rotate(-90deg);
+
 }
 
 p.yticks {

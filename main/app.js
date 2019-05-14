@@ -75,7 +75,7 @@ function axesSetup(datas, option, chartRoot){
   }
 
 /** y axis **/
-  $(chartRoot).before("<h2 id='yaxis'>y Axis</h2>"); // to set left of chart
+  $(chartRoot).before("<h2 class='with-y' id='yaxis'>y Axis (%)</h2>"); // to set left of chart
   $('#yaxis').css('float', "left");
 
   let yAxisTicks = document.createElement('div');
@@ -97,9 +97,10 @@ function axesSetup(datas, option, chartRoot){
 
 
   /** keep y axis relative to root **/
-  $('.wrap-chart').wrapAll("<div class='chart-wrapper' />");
+  $('.wrap-chart').wrapAll("<div class='chart-wrapper with-y' />");
   //add x axis title after yaxis and chart have been wrapped
   $('.chart-wrapper').after("<h2 id='xaxis'>x Axis</h2>");
+  $('.with-y').wrapAll("<div class='chartWithY'></div>");
 
 
 return;
