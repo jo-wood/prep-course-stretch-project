@@ -9,18 +9,20 @@
 let barFraction;
 let barWidth;
 let xlabels = {};
+let yAxisSteps = 10;
+let chartHeight;
 
 /***************** create chart from data **********************/
 
 function setup(data) {
   let correctDataOrder = data.slice(); //store data without mutating
   let buildChart = document.createElement('div');
-  let revData = data.reverse(); // bc flipped in css for styling
+  let revData = [...data].reverse(); // bc flipped in css for styling
 
   barFraction = (100 - data.length) / data.length;
 
   /** add bars **/
-  for (let num of data) {
+  for (let num of revData) {
     let dataLabel = "<p>" + num + "</p>";
     var newdiv = document.createElement( "div" );
       $(newdiv).append(dataLabel);
@@ -35,7 +37,7 @@ function setup(data) {
       $(newdiv).css("width", barWidth); // bar width same for all
 
     /** create each bars height based on entry value **/
-      let newheight = num*10 + "%";
+      let newheight = num*yAxisSteps + "%";
       $(newdiv).css("height" , newheight);
 
     $(buildChart).append(newdiv);
@@ -48,40 +50,56 @@ return buildChart;
 
 /***************** create y and x axis **********************/
 
-function axesSetup(data, option, chartRoot){
+function axesSetup(datas, option, chartRoot){
 
-  let rootHeight = $('#root')[0].offsetHeight; // account for ~10% as text height
-
-/**x axis and xlabels **/
-  $('body').append("<h2 id='xaxis'>x Axis</h2>");
-
+/**x axis labels **/
   let xAxisLabels = document.createElement('div');
-  $(xAxisLabels).attr("id", "axesLabels");
+  $(xAxisLabels).attr("id", "axesXLabels");
 
-  for(let z = data.length - 1; z >= 0; z--){
-    let storeValue = data[z];
+  for(let z = 0; z < datas.length ; z++){
+    let storeValue = datas[z];
     let xlabelId = 'dataValue-' + storeValue;
     $(xAxisLabels).append("<p class='xlabel' id='" + xlabelId + "'>" + xlabels[storeValue] + "</p>");
-  }//data for loop
+  }//datas for loop
 
-$("#root").append(xAxisLabels);
-$('.xlabel').innerWidth(Math.ceil(barFraction) + "%");
+  $("#root").append(xAxisLabels);
+  $('.xlabel').innerWidth(Math.ceil(barFraction) + "%");
+  $('.xlabel').css("color", option.chart.axesX);
 
-//center xlabel div along with any chart's padding
-if (option !== null && option.chart.width !== null){
-  $(axesLabels).css("width", option.chart.width);
-  $(axesLabels).css("padding", $('#chart').css("padding"));
-} else {
-  $(axesLabels).css("padding", $('#chart').css("padding"));
-}
+  //center xlabel div along with any chart's padding
+  if (option !== null && option.chart.width !== null){
+    $(axesXLabels).css("width", option.chart.width);
+    $(axesXLabels).css("padding", $('#chart').css("padding"));
+  } else {
+    $(axesXLabels).css("padding", $('#chart').css("padding"));
+  }
 
-/** y axis  **/
+/** y axis **/
   $(chartRoot).before("<h2 id='yaxis'>y Axis</h2>"); // to set left of chart
-  $('#yaxis').addClass('wrap-chart');
   $('#yaxis').css('float', "left");
 
-/** keep y axis relative to root **/
-$('.wrap-chart').wrapAll("<div class='chart-wrapper' />");
+  let yAxisTicks = document.createElement('div');
+  //$(yAxisTicks).addClass("wrap-chart");
+  $(yAxisTicks).attr("id", "axesYTicks");
+
+  //find highest num in array for number of yticks:
+  //use es6 spread-syntax to sort without mutating original data:
+  let sortedData = [...datas];
+  sortedData.sort((a, b) => {return a - b;});
+
+  for (let i = 0; i < sortedData[sortedData.length - 1]; i++){
+      let adjustTicks = chartHeight/yAxisSteps;
+      let ticks = "<p class='yticks' style='margin-bottom: " + adjustTicks + "'></p>";
+      $(yAxisTicks).append(ticks);
+  }
+
+  $('#root').prepend(yAxisTicks);
+
+
+  /** keep y axis relative to root **/
+  $('.wrap-chart').wrapAll("<div class='chart-wrapper' />");
+  //add x axis title after yaxis and chart have been wrapped
+  $('.chart-wrapper').after("<h2 id='xaxis'>x Axis</h2>");
 
 
 return;
@@ -160,10 +178,12 @@ return;
 function drawBarChart(dataSet, options, element){
 
   /* create chart from data at element location */
+  $(element).addClass('wrap-chart');
+
   let chart = setup(dataSet);
   $(chart).attr('id', 'chart');
   $(element).append(chart);
-  $(element).addClass('wrap-chart');
+
 
   /* allow chart customization */
   if(options !== null){
@@ -172,9 +192,13 @@ function drawBarChart(dataSet, options, element){
 
 
   /* add x and y axes relative to added chart */
+  chartHeight = $('#chart').css('height');
+  chartHeight = parseInt(chartHeight.replace(/[^0-9.,]+/, ''));
   axesSetup(dataSet, options, element);
 
-
+  let yaxisCentered = ($('#yaxis')[0].offsetHeight + chartHeight) / 2;
+  console.log($('#yaxis')[0].offsetHeight);
+  $('#yaxis').css('margin-top', yaxisCentered);
 
 
 } //fn drawBarChart
@@ -192,7 +216,7 @@ let custom = {
   chart: {
       width: 200,
       height: 200,
-      axesX: null,
+      axesX: "BlueViolet",
       axesY: null
     },
   bars: {
@@ -204,7 +228,7 @@ let custom = {
 
 
 /*** UNIT TEST with no customizations passed ***/
-drawBarChart([1, 4, 2, 10, 6, 5], null, document.getElementById("root"));
+//drawBarChart([1, 4, 2, 10, 6, 5], null, document.getElementById("root"));
 
 /*** UNIT TEST with custom options ***/
-//drawBarChart([1, 4, 2, 10, 6, 5], custom, document.getElementById("root"));
+drawBarChart([1, 4, 2, 10, 6, 5], custom, document.getElementById("root"));
