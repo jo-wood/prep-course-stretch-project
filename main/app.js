@@ -115,7 +115,7 @@ function axesSetup(datas, option, chartRoot){
 /**x axis labels **/
 
     //add x axis title after yaxis and chart have been wrapped
-    $('.chart-wrapper').append("<h2 id='xaxis'>x Axis</h2>");
+    $('#root').append("<h2 id='xaxis'>x Axis</h2>");
     $('.with-y').wrapAll("<div class='chartWithY'></div>");
 
     let yaxisCentered = ($('#yaxis')[0].offsetHeight) / 2;
@@ -209,8 +209,8 @@ function drawBarChart(dataSet, options, element){
   customize(options);
 
   /* add x and y axes relative to added chart */
-  chartHeight = $('#chart').css('height');
-  chartHeight = parseInt(chartHeight.replace(/[^0-9.,]+/, ''));
+ chartHeight = $('#chart').css('height');
+ chartHeight = parseInt(chartHeight.replace(/[^0-9.,]+/, ''));
 
   axesSetup(dataSet, options, element);
 
@@ -231,7 +231,7 @@ let custom = {
       width: 200,
       height: 200,
       axesX: "BlueViolet",
-      axesY: 20
+      axesY: null
     },
   bars: {
       barColor: "orange",
