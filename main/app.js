@@ -197,7 +197,7 @@ function drawBarChart(dataSet, options, element){
   chartHeight = parseInt(chartHeight.replace(/[^0-9.,]+/, ''));
   axesSetup(dataSet, options, element);
 
-  let yaxisCentered = ($('#yaxis')[0].offsetHeight + chartHeight) / 2;
+  let yaxisCentered = ($('#yaxis')[0].offsetHeight) / 2;
   console.log($('#yaxis')[0].offsetHeight);
   $('#yaxis').css('margin-top', yaxisCentered);
 

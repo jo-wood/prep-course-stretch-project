@@ -7,8 +7,8 @@ body{
 }
 
 div#root{
-  width:94%;
-  padding: 6%;
+  width:92%;
+  padding: 8%;
   background: #F8F8FF;
   border-radius: 5%;
 }
@@ -17,13 +17,14 @@ h1 {
   width: 100%;
   color:dimGrey;
   text-align:center;
+  float:left;
 }
 
 .chartWithY {
-  margin: 0 auto;
-  min-width: 96%;
-  float:left;
-  padding: 0 2%;
+  width: 100%;
+  margin-left:-10%;
+  display:flex;
+  justify-content: center;
 }
 
 .chart-wrapper {
@@ -58,6 +59,7 @@ h1 {
 
 
 #xaxis {
+  clear:both;
   min-width: 100%;
   text-align: center;
   float:left;
