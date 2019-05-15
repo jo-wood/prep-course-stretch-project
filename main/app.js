@@ -53,117 +53,129 @@ return buildChart;
 function axesSetup(datas, option, chartRoot){
 
 /**x axis labels **/
-  let xAxisLabels = document.createElement('div');
-  $(xAxisLabels).attr("id", "axesXLabels");
 
-  for(let z = 0; z < datas.length ; z++){
-    let storeValue = datas[z];
-    let xlabelId = 'dataValue-' + storeValue;
-    $(xAxisLabels).append("<p class='xlabel' id='" + xlabelId + "'>" + xlabels[storeValue] + "</p>");
-  }//datas for loop
+    let xAxisLabels = document.createElement('div');
+    $(xAxisLabels).attr("id", "axesXLabels");
 
-  $("#root").append(xAxisLabels);
-  $('.xlabel').innerWidth(Math.ceil(barFraction) + "%");
-  $('.xlabel').css("color", option.chart.axesX);
+    for(let z = 0; z < datas.length ; z++){
+      let storeValue = datas[z];
+      let xlabelId = 'dataValue-' + storeValue;
+      $(xAxisLabels).append("<p class='xlabel' id='" + xlabelId + "'>" + xlabels[storeValue] + "</p>");
+    }//datas for loop
 
-  //center xlabel div along with any chart's padding
-  if (option !== null && option.chart.width !== null){
-    $(axesXLabels).css("width", option.chart.width);
-    $(axesXLabels).css("padding", $('#chart').css("padding"));
-  } else {
-    $(axesXLabels).css("padding", $('#chart').css("padding"));
-  }
+    $("#root").append(xAxisLabels);
+    $('.xlabel').innerWidth(Math.ceil(barFraction) + "%");
 
-/** y axis **/
-  $(chartRoot).before("<h2 class='with-y' id='yaxis'>y Axis (%)</h2>"); // to set left of chart
-  $('#yaxis').css('float', "left");
+    //center xlabel div along with any chart's padding
+    if (option !== null && option.chart.width !== null){
+      $('.xlabel').css("color", option.chart.axesX);
+      $(axesXLabels).css("width", option.chart.width);
+      $(axesXLabels).css("padding", $('#chart').css("padding"));
+    } else if (option === null) {
+      $(axesXLabels).css("padding", $('#chart').css("padding"));
+    }
 
-  let yAxisTicks = document.createElement('div');
-  //$(yAxisTicks).addClass("wrap-chart");
-  $(yAxisTicks).attr("id", "axesYTicks");
+/** y axis labels **/
 
-  let yscale = document.createElement("ul");
+    $(chartRoot).before("<h2 class='with-y' id='yaxis'>y Axis (%)</h2>"); // to set left of chart
+    $('#yaxis').css('float', "left");
 
-  //find highest num in array for number of yticks:
-  //use es6 spread-syntax to sort without mutating original data:
-  let sortedData = [...datas];
-  sortedData.sort((a, b) => {return a - b;});
+    let yAxisTicks = document.createElement('div');
+    //$(yAxisTicks).addClass("wrap-chart");
+    $(yAxisTicks).attr("id", "axesYTicks");
 
-  let adjustTicks = chartHeight/yAxisSteps;
-  let highestValue = sortedData[sortedData.length - 1];
-  for (let i = 0; i < highestValue; i++){
-      let ticks = "<p class='yticks' style='margin-bottom: " + adjustTicks + "'></p>";
-      $(yAxisTicks).append(ticks);
-      $(yscale).append( "<li>" + (highestValue - i)*10 + "</li>" );
-  }
+    let yscale = document.createElement("ul");
+
+    //find highest num in array for number of yticks:
+    //use es6 spread-syntax to sort without mutating original data:
+    let sortedData = [...datas];
+    sortedData.sort((a, b) => {return a - b;});
+
+    let adjustTicks = chartHeight/yAxisSteps;
+    let highestValue = sortedData[sortedData.length - 1];
+    for (let i = 0; i < highestValue; i++){
+        let ticks = "<p class='yticks' style='margin-bottom: " + adjustTicks + "'></p>";
+        $(yAxisTicks).append(ticks);
+        $(yscale).append( "<li>" + (highestValue - i)*yAxisSteps + "</li>" );
+    }
 
   $('#root').prepend(yAxisTicks);
 
-  /** keep y axis relative to root **/
+  // keep y axis relative to root
   $('.wrap-chart').wrapAll("<div class='chart-wrapper with-y' />");
-  /** add scale to y axis **/
 
-
+  // add scale to y axis
   $('.chart-wrapper').prepend(yscale);
 
-  //add x axis title after yaxis and chart have been wrapped
-  $('.chart-wrapper').after("<h2 id='xaxis'>x Axis</h2>");
-  $('.with-y').wrapAll("<div class='chartWithY'></div>");
+  // keep scales relative to ticks and root of chart
+  $('li').css('line-height', (adjustTicks + "px"));
+    //adjust margin by have the line-height for first tick
+  $('ul').css('margin-top', (adjustTicks/2 + "px"));
+
+/**x axis labels **/
+
+    //add x axis title after yaxis and chart have been wrapped
+    $('.chart-wrapper').append("<h2 id='xaxis'>x Axis</h2>");
+    $('.with-y').wrapAll("<div class='chartWithY'></div>");
+
+    let yaxisCentered = ($('#yaxis')[0].offsetHeight) / 2;
+    $('#yaxis').css('margin-top', yaxisCentered);
 
 
 return;
 } //fn axesSetup
 
+
 /*************** customize the chart with options **************/
 
 function customize(changes) {
-
-  /*** TITLE specifc customizations ***/
-  $('#title').html(changes.title.titleName);
-    //original h1 not getting removed?
-  $('#title').css('color', changes.title.titleColor);
-  $('#title').css('font-family', changes.title.titleFont);
-
-  /*** CHART specifc customizations ***/
-  $('#chart').css('width', changes.chart.width);
-  $('#root').css('width',  changes.chart.width);
 
   function chartHeight(newHeight){
     $('#chart').css('height', newHeight);
     $('#root').css('height', newHeight);
   }
 
+  if (changes !== null){
+  /*** TITLE specifc customizations ***/
+    $('#title').html(changes.title.titleName);
+      //original h1 not getting removed?
+    $('#title').css('color', changes.title.titleColor);
+    $('#title').css('font-family', changes.title.titleFont);
+
+    /*** CHART specifc customizations ***/
+    $('#chart').css('width', changes.chart.width);
+    $('#root').css('width',  changes.chart.width);
+
 
   /*** BAR specifc customizations ***/
-  let labels = $('div.bar-num').map(function() {
+    let labels = $('div.bar-num').map(function() {
 
-    //bar color:
-    $(this).css('background-color', changes.bars.barColor);
+      //bar color:
+      $(this).css('background-color', changes.bars.barColor);
 
-    //bar space:
-    let newMargin = changes.bars.barSpace + "%";
-    barWidth = barFraction - changes.bars.barSpace + "%";
-    $(this).css('width', barWidth);
-    $(this).css('margin-left', newMargin);
+      //bar space:
+      let newMargin = changes.bars.barSpace + "%";
+      barWidth = barFraction - changes.bars.barSpace + "%";
+      $(this).css('width', barWidth);
+      $(this).css('margin-left', newMargin);
 
-    //label colour:
-    $(this.children[0]).css('color', changes.bars.labelColour);
+  //label colour:
+      $(this.children[0]).css('color', changes.bars.labelColour);
 
-    //label position:
+  //label position:
       function adjustBarLabels(barDiv){
         barDiv.map(function() {
           let top = this.offsetHeight;
           let center = this.offsetParent.offsetHeight/2 - top;
           let bottom = this.offsetParent.offsetHeight - top;
-
-          if (changes.bars.labelLocation === "center") {
+            if (changes.bars.labelLocation === "center") {
             $(this).css('margin-top', Math.abs(center));
           } else if (changes.bars.labelLocation === "bottom"){
             $(this).css('margin-top', Math.abs(bottom));
             }
         });
-        return;
-      }
+      return;
+    }
 
     if(changes.chart.height === null){
       adjustBarLabels($(this.children[0]));
@@ -171,13 +183,12 @@ function customize(changes) {
       chartHeight(changes.chart.height);
       adjustBarLabels($(this.children[0]));
       }
-
-
-});// fn labels
-
+    });// fn labels
+  } //end of if not null
 
 return;
 } //fn customize
+
 
 
 /////////////////////////////////////////////////////////////////
@@ -195,21 +206,15 @@ function drawBarChart(dataSet, options, element){
 
 
   /* allow chart customization */
-  if(options !== null){
-    customize(options);
-  }
-
+  customize(options);
 
   /* add x and y axes relative to added chart */
   chartHeight = $('#chart').css('height');
   chartHeight = parseInt(chartHeight.replace(/[^0-9.,]+/, ''));
+
   axesSetup(dataSet, options, element);
 
-  let yaxisCentered = ($('#yaxis')[0].offsetHeight) / 2;
-  console.log($('#yaxis')[0].offsetHeight);
-  $('#yaxis').css('margin-top', yaxisCentered);
-
-
+return;
 } //fn drawBarChart
 
 
@@ -226,7 +231,7 @@ let custom = {
       width: 200,
       height: 200,
       axesX: "BlueViolet",
-      axesY: null
+      axesY: 20
     },
   bars: {
       barColor: "orange",
