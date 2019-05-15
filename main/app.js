@@ -82,22 +82,30 @@ function axesSetup(datas, option, chartRoot){
   //$(yAxisTicks).addClass("wrap-chart");
   $(yAxisTicks).attr("id", "axesYTicks");
 
+  let yscale = document.createElement("ul");
+
   //find highest num in array for number of yticks:
   //use es6 spread-syntax to sort without mutating original data:
   let sortedData = [...datas];
   sortedData.sort((a, b) => {return a - b;});
 
-  for (let i = 0; i < sortedData[sortedData.length - 1]; i++){
-      let adjustTicks = chartHeight/yAxisSteps;
+  let adjustTicks = chartHeight/yAxisSteps;
+  let highestValue = sortedData[sortedData.length - 1];
+  for (let i = 0; i < highestValue; i++){
       let ticks = "<p class='yticks' style='margin-bottom: " + adjustTicks + "'></p>";
       $(yAxisTicks).append(ticks);
+      $(yscale).append( "<li>" + (highestValue - i)*10 + "</li>" );
   }
 
   $('#root').prepend(yAxisTicks);
 
-
   /** keep y axis relative to root **/
   $('.wrap-chart').wrapAll("<div class='chart-wrapper with-y' />");
+  /** add scale to y axis **/
+
+
+  $('.chart-wrapper').prepend(yscale);
+
   //add x axis title after yaxis and chart have been wrapped
   $('.chart-wrapper').after("<h2 id='xaxis'>x Axis</h2>");
   $('.with-y').wrapAll("<div class='chartWithY'></div>");
@@ -111,7 +119,7 @@ return;
 function customize(changes) {
 
   /*** TITLE specifc customizations ***/
-  $('#title').replaceWith("<h1 id='title'>" + changes.title.titleName + "<h1/>" );
+  $('#title').html(changes.title.titleName);
     //original h1 not getting removed?
   $('#title').css('color', changes.title.titleColor);
   $('#title').css('font-family', changes.title.titleFont);
