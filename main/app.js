@@ -133,10 +133,11 @@ function axesSetup(datas, option, chartRoot){
     $('.chart-wrapper').prepend(yscale);
 
     // keep scales relative to ticks and root of chart
-  $('li').css('line-height', (Math.ceil(adjustTicks) + "px"));
+    //
+  $('li').css('line-height', (adjustTicks + "px"));
     //adjust margin by have the line-height for first tick
-    //subtract by approximate px of the yaxis numbers from css
-  $('ul').css('margin-top', ((adjustTicks/2) - (7) + "px"));
+    //subtract by approximate 1/2 px of the yaxis numbers from css
+  $('ul').css('margin-top', (Math.floor(adjustTicks/2) + "px"));
     //add same spacing to the starting point of the y axis yAxisTicks
   $('#axesYTicks').css('padding-bottom', ((adjustTicks/2) - (7) + "px"));
 
@@ -196,14 +197,19 @@ function customize(changes, rootElement) {
   //label position:
       function adjustBarLabels(barDiv){
         barDiv.map(function() {
-          let top = this.offsetHeight;
-          let center = this.offsetParent.offsetHeight/2 - top;
-          let bottom = this.offsetParent.offsetHeight - top;
-            if (changes.bars.labelLocation === "center") {
-            $(this).css('margin-top', Math.abs(center));
-          } else if (changes.bars.labelLocation === "bottom"){
-            $(this).css('margin-top', Math.abs(bottom));
-            }
+
+          let moveBarLabel = changes.bars.labelLocation;
+          let changeLabel;
+
+          if (moveBarLabel === "center") {
+            changeLabel = "center";
+          } else if (moveBarLabel === "bottom"){
+            changeLabel = "flex-end";
+          } else if (moveBarLabel === "top"){
+              changeLabel = "flex-start";
+              }
+
+          $(this).css('align-items', changeLabel);
         });
       return;
     }
