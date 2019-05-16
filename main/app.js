@@ -6,6 +6,7 @@
 
 /*  global scopes:  */
 
+let newTitle = "Bar Chart";
 let barFraction;
 let barWidth;
 let xlabels = {};
@@ -229,7 +230,26 @@ return;
 /*********************** main function *************************/
 /////////////////////////////////////////////////////////////////
 
+let btn = document.getElementById("changeTitle");
+
+btn.addEventListener("click", function() {
+  $('input').css("display", "inline");
+  $('#changeTitle').css("display", "none");
+  $('#set').css("display", "inline");
+    $('#set').on( "click", function() {
+      newTitle = $('input')[0].value;
+      $('#title')[0].textContent = newTitle;
+      $('input').css("display", "none");
+      $('#set').css("display", "none");
+      $('#changeTitle').css("display", "inline");
+    });
+
+});
+
+
 function drawBarChart(dataSet, options, element){
+
+
 
   /* create chart from data at element location */
   if (!element){ element = $('#root');}
@@ -254,7 +274,7 @@ let custom = {
   title: {
       titleColor: "coral",
       titleFont: "courier",
-      titleName: "My Custom Bar Chart:"
+      titleName: "My new custom title"
     },
   chart: {
       width: 200,
@@ -271,7 +291,7 @@ let custom = {
 
 
 /*** UNIT TEST with no customizations passed ***/
-//drawBarChart([1, 4, 2, 10, 6, 5], null, document.getElementById("root"));
+drawBarChart([1, 4, 2, 10, 6, 5], null, document.getElementById("root"));
 
 /*** UNIT TEST with custom options ***/
-drawBarChart([1, 4, 2, 10, 6, 5], custom, document.getElementById("root"));
+//drawBarChart([1, 4, 2, 10, 6, 5], custom, document.getElementById("root"));
