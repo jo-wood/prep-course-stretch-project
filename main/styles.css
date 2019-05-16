@@ -4,6 +4,7 @@
 body{
   background: #FFEBCD;
   max-width: 96%;
+  max-height: 96%
   margin:2% auto;
   font-size:.5em;
   color:grey;
@@ -63,7 +64,7 @@ h1 {
 }
 
 .chart-wrapper {
-  max-width:90%;
+
 }
 
 /***********  axes styles:  ************/
@@ -90,12 +91,14 @@ p.xlabel{
 
 #yaxis {
   text-align: center;
+
 }
 
 #axesYTicks {
   width:2%;
   height:0;
   float:left;
+  border-left: solid thin grey;
 }
 
 p.yticks {
@@ -108,7 +111,6 @@ ul {
   list-style-type: none;
   text-align:right;
   padding-left:1%;
-  font-size: 93%;
   width:6%;
   margin:0;
   margin-right: -8;

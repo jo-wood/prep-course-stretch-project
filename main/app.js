@@ -10,13 +10,19 @@ let barFraction;
 let barWidth;
 let xlabels = {};
 let yAxisSteps = 10;
-let chartHeight;
+console.log($('body').innerHeight());
+let chartHeight = $('body').innerHeight();
+//chartHeight = parseInt(chartHeight.replace(/[^0-9.,]+/, ''));
+let chartWidth = $('body').innerWidth();
+//chartWidth = parseInt(chartWidth.replace(/[^0-9.,]+/, ''));
 
 /***************** create chart from data **********************/
 
-function setup(data) {
+function setup(data, insertElement) {
+
   let correctDataOrder = data.slice(); //store data without mutating
   let buildChart = document.createElement('div');
+    $(buildChart).attr('id', 'chart');
   let revData = [...data].reverse(); // bc flipped in css for styling
 
   barFraction = (100 - data.length) / data.length;
@@ -37,15 +43,32 @@ function setup(data) {
       $(newdiv).css("width", barWidth); // bar width same for all
 
     /** create each bars height based on entry value **/
-      let newheight = num*yAxisSteps + "%";
+    //subtract px of bar label font size from css
+      let newheight = (num*yAxisSteps) - (24/chartHeight) + "%";
       $(newdiv).css("height" , newheight);
 
     $(buildChart).append(newdiv);
 
   } //end for loop of data entries
 
-return buildChart;
+rootDims(insertElement, chartHeight, chartWidth);
+$(insertElement).append(buildChart);
+
+return;
 } //fn setup
+
+
+/***************** chart+root w & h **********************/
+function rootDims(el, w, h){
+  $(el).css("width", (w + "px"));
+  $(el).css("height", (h + "px"));
+
+  $('#chart').css("width", (w + "px"));
+  $('#chart').css("height", (h + "px"));
+
+return;
+} //fn rootDims
+
 
 
 /***************** create y and x axis **********************/
@@ -63,16 +86,18 @@ function axesSetup(datas, option, chartRoot){
       $(xAxisLabels).append("<p class='xlabel' id='" + xlabelId + "'>" + xlabels[storeValue] + "</p>");
     }//datas for loop
 
-    $("#root").append(xAxisLabels);
+    $(chartRoot).append(xAxisLabels);
     $('.xlabel').innerWidth(Math.ceil(barFraction) + "%");
 
+    $(axesXLabels).css("padding", $('#chart').css("padding"));
     //center xlabel div along with any chart's padding
-    if (option !== null && option.chart.width !== null){
-      $('.xlabel').css("color", option.chart.axesX);
+
+    if (option){
       $(axesXLabels).css("width", option.chart.width);
-      $(axesXLabels).css("padding", $('#chart').css("padding"));
-    } else if (option === null) {
-      $(axesXLabels).css("padding", $('#chart').css("padding"));
+    }
+
+    if (option){
+      $('.xlabel').css("color", option.chart.axesX);
     }
 
 /** y axis labels **/
@@ -99,23 +124,26 @@ function axesSetup(datas, option, chartRoot){
         $(yscale).append( "<li>" + (highestValue - i)*yAxisSteps + "</li>" );
     }
 
-  $('#root').prepend(yAxisTicks);
+    $(chartRoot).prepend(yAxisTicks);
 
-  // keep y axis relative to root
-  $('.wrap-chart').wrapAll("<div class='chart-wrapper with-y' />");
+    // keep y axis relative to root
+    $('.wrap-chart').wrapAll("<div class='chart-wrapper with-y' />");
 
-  // add scale to y axis
-  $('.chart-wrapper').prepend(yscale);
+    // add scale to y axis
+    $('.chart-wrapper').prepend(yscale);
 
-  // keep scales relative to ticks and root of chart
-  $('li').css('line-height', (adjustTicks + "px"));
+    // keep scales relative to ticks and root of chart
+  $('li').css('line-height', (Math.ceil(adjustTicks) + "px"));
     //adjust margin by have the line-height for first tick
-  $('ul').css('margin-top', (adjustTicks/2 + "px"));
+    //subtract by approximate px of the yaxis numbers from css
+  $('ul').css('margin-top', ((adjustTicks/2) - (7) + "px"));
+    //add same spacing to the starting point of the y axis yAxisTicks
+  $('#axesYTicks').css('padding-bottom', ((adjustTicks/2) - (7) + "px"));
 
 /**x axis labels **/
 
     //add x axis title after yaxis and chart have been wrapped
-    $('#root').append("<h2 id='xaxis'>x Axis</h2>");
+    $(chartRoot).append("<h2 id='xaxis'>x Axis</h2>");
     $('.with-y').wrapAll("<div class='chartWithY'></div>");
 
     let yaxisCentered = ($('#yaxis')[0].offsetHeight) / 2;
@@ -128,23 +156,26 @@ return;
 
 /*************** customize the chart with options **************/
 
-function customize(changes) {
-
-  function chartHeight(newHeight){
-    $('#chart').css('height', newHeight);
-    $('#root').css('height', newHeight);
-  }
+function customize(changes, rootElement) {
 
   if (changes !== null){
+
+  /*** CHART specifc customizations ***/
+
+      if (changes.chart.height) {
+        chartHeight = changes.chart.height;
+      }
+      if (changes.chart.width) {
+        chartWidth = changes.chart.width;
+      }
+      rootDims(rootElement, chartWidth, chartHeight);
+
+
   /*** TITLE specifc customizations ***/
     $('#title').html(changes.title.titleName);
       //original h1 not getting removed?
     $('#title').css('color', changes.title.titleColor);
     $('#title').css('font-family', changes.title.titleFont);
-
-    /*** CHART specifc customizations ***/
-    $('#chart').css('width', changes.chart.width);
-    $('#root').css('width',  changes.chart.width);
 
 
   /*** BAR specifc customizations ***/
@@ -177,14 +208,11 @@ function customize(changes) {
       return;
     }
 
-    if(changes.chart.height === null){
-      adjustBarLabels($(this.children[0]));
-    } else {
-      chartHeight(changes.chart.height);
-      adjustBarLabels($(this.children[0]));
-      }
+  adjustBarLabels($(this.children[0]));
+
     });// fn labels
   } //end of if not null
+
 
 return;
 } //fn customize
@@ -198,21 +226,16 @@ return;
 function drawBarChart(dataSet, options, element){
 
   /* create chart from data at element location */
+  if (!element){ element = $('#root');}
   $(element).addClass('wrap-chart');
 
-  let chart = setup(dataSet);
-  $(chart).attr('id', 'chart');
-  $(element).append(chart);
+  setup(dataSet, element);
 
-
-  /* allow chart customization */
-  customize(options);
-
-  /* add x and y axes relative to added chart */
- chartHeight = $('#chart').css('height');
- chartHeight = parseInt(chartHeight.replace(/[^0-9.,]+/, ''));
+/* allow chart customization before axesSetup */
+  customize(options, element);
 
   axesSetup(dataSet, options, element);
+
 
 return;
 } //fn drawBarChart
