@@ -235,6 +235,10 @@ let $element = $(element);
 
       $yaxis.css('margin-top', yaxisCentered);
 
+// adjust axes label colors here as this function runs after customize
+let chart = options.chart;
+    if (chart.axesX){$('.xlabel').css("color", chart.axesX);}
+    if (chart.axesY){$('ul').css("color", chart.axesY);}
 
 return;
 } //fn axesSetup
@@ -256,9 +260,6 @@ function customize({options, element}) {
       if (chart.width) {chartWidth = chart.width;}
 
     rootDims(element, chartWidth, chartHeight);
-
-      if (chart.axesX){$('.xlabel').css("color", chart.axesX);}
-      if (chart.axesY){$('ul').css("color", chart.axesY);}
 
 
   /*** TITLE specifc customizations ***/
