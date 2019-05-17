@@ -291,7 +291,7 @@ let custom = {
 
 
 /*** UNIT TEST with no customizations passed ***/
-drawBarChart([1, 4, 2, 10, 6, 5], null, document.getElementById("root"));
+//drawBarChart([1, 4, 2, 10, 6, 5], null, document.getElementById("root"));
 
 /*** UNIT TEST with custom options ***/
-//drawBarChart([1, 4, 2, 10, 6, 5], custom, document.getElementById("root"));
+drawBarChart([1, 4, 2, 10, 6, 5], custom, document.getElementById("root"));
