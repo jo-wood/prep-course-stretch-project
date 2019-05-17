@@ -93,13 +93,14 @@ function axesSetup(datas, option, chartRoot){
     $(axesXLabels).css("padding", $('#chart').css("padding"));
     //center xlabel div along with any chart's padding
 
-    if (option){
+    if (option.chart.width){
       $(axesXLabels).css("width", option.chart.width);
     }
 
-    if (option){
+    if (option.chart.axesX){
       $('.xlabel').css("color", option.chart.axesX);
     }
+
 
 /** y axis labels **/
 
@@ -132,6 +133,10 @@ function axesSetup(datas, option, chartRoot){
 
     // add scale to y axis
     $('.chart-wrapper').prepend(yscale);
+
+    if (option.chart.axesY){
+      $('ul').css("color", option.chart.axesY);
+    }
 
     // keep scales relative to ticks and root of chart
     //
@@ -178,6 +183,8 @@ function customize(changes, rootElement) {
       //original h1 not getting removed?
     $('#title').css('color', changes.title.titleColor);
     $('#title').css('font-family', changes.title.titleFont);
+
+
 
 
   /*** BAR specifc customizations ***/
@@ -280,7 +287,7 @@ let custom = {
       width: 200,
       height: 200,
       axesX: "BlueViolet",
-      axesY: null
+      axesY: "salmon"
     },
   bars: {
       barColor: "orange",
