@@ -4,15 +4,46 @@
 /*********************** helper fns ****************************/
 /////////////////////////////////////////////////////////////////
 
-/*  global scopes:  */
 
-let newTitle = "Bar Chart";
-let barFraction;
-let barWidth;
-let xlabels = {};
-let yAxisSteps = 10;
-let chartHeight = $('body').innerHeight();
-let chartWidth = $('body').innerWidth();
+//////////   global scopes ///////////
+
+let newTitle = "Bar Chart",
+    barFraction,
+    barWidth,
+    xlabels = {},
+    yAxisSteps = 10,
+    chartHeight = $('body').innerHeight(),
+    chartWidth = $('body').innerWidth();
+
+
+//////////  constructors   ///////////
+
+let div = 'div',
+    p = 'p',
+    ul = 'ul',
+    li = 'li',
+    h2 = 'h2';
+
+function newElement(el){
+
+      return document.createElement(el);
+
+    //else {
+  //
+  //     document.createElement(el);
+  //       $el = $(el);
+  //       $el.attr("id", id);
+  //       $el.addClass(group);
+  //       $el.html(html);
+  //     return el;
+  // }
+
+
+}
+
+
+
+
 
 
 /***************** create chart from data **********************/
@@ -20,35 +51,38 @@ let chartWidth = $('body').innerWidth();
 
 function setup({data, element}) {
 
-  let correctDataOrder = data.slice(); //store data without mutating
-  let buildChart = document.createElement('div');
-    $(buildChart).attr('id', 'chart');
+  let dataOrder = data.slice(); //store data without mutating
+
+  let buildChart = newElement(div);
+  let $buildChart = $(buildChart);
+  $buildChart.attr('id', 'chart');
+
   let revData = [...data].reverse(); // bc flipped in css for styling
 
   barFraction = (100 - data.length) / data.length;
 
-  /** add bars **/
+/** add bars **/
   for (let num of revData) {
     let dataLabel = "<p>" + num + "</p>";
-    var newdiv = document.createElement( "div" );
+    var newdiv = newElement(div, num, "bar-num");
     let $newdiv = $(newdiv);
       $newdiv.append(dataLabel);
       $newdiv.addClass("bar-num");
       $newdiv.attr('id', num);
 
-    let dataIndex = correctDataOrder.indexOf(num);
+    let dataIndex = dataOrder.indexOf(num);
     Object.keys(xlabels[num] = "Index:" + dataIndex);
 
-    /** set bar widths **/
+/** set bar widths **/
       barWidth = Math.floor(barFraction) + "%";
       $newdiv.css("width", barWidth); // bar width same for all
 
-    /** create each bars height based on entry value **/
-      //subtract px of bar label font size from css
-      let newheight = (num*yAxisSteps) - (24/chartHeight) + "%";
-      $newdiv.css("height" , newheight);
+/** create each bars height based on entry value **/
+    //subtract px of bar label font size from css
+    let newheight = (num*yAxisSteps) - (24/chartHeight) + "%";
+    $newdiv.css("height" , newheight);
 
-    $(buildChart).append(newdiv);
+    $buildChart.append(newdiv);
 
   } //end for loop of data entries
 
@@ -82,73 +116,124 @@ return;
 
 function axesSetup({data, options, element}){
 
-  let $element = $(element);
+let $element = $(element);
 
 /**x axis labels **/
 
-    let xAxisLabels = document.createElement('div');
-    let $xAxisLabels = $(xAxisLabels);
+    let xAxisLabels = newElement(div),
+        $xAxisLabels = $(xAxisLabels);
+
     $xAxisLabels.attr("id", "axesXLabels");
 
-    for(let z = 0; z < data.length ; z++){
-      let storeValue = data[z];
-      let xlabelId = 'dataValue-' + storeValue;
-      $xAxisLabels.append("<p class='xlabel' id='" + xlabelId + "'>" + xlabels[storeValue] + "</p>");
+    for (let z = 0; z < data.length ; z++){
+      let storeValue = data[z],
+          xlabelId = 'dataValue-' + storeValue,
+          xlabel = newElement(p),
+          $xlabel = $(xlabel);
+
+      $xlabel.addClass("xlabel");
+      $xlabel.attr('id', xlabelId);
+      $xlabel.html(xlabels[storeValue]);
+      $xlabel.innerWidth(Math.ceil(barFraction) + "%");
+
+      $xAxisLabels.append(xlabel);
+
     }//data for loop
 
-    $element.append(xAxisLabels);
-    $('.xlabel').innerWidth(Math.ceil(barFraction) + "%");
-    $xAxisLabels.css("padding", $('#chart').css("padding")); //center xlabel div along with any chart's padding
-    $xAxisLabels.css("width", chartWidth);
+  $element.append(xAxisLabels);
 
+  $xAxisLabels.css("padding", $('#chart').css("padding")); //center xlabel div along with any chart's padding
+  $xAxisLabels.css("width", chartWidth);
+
+
+/** y axis  **/
+
+    let yaxis = newElement(h2),
+        $yaxis = $(yaxis);
+
+    $yaxis.addClass("with-y");
+    $yaxis.attr("id", "yaxis");
+    $yaxis.html("y Axis (%)");
+    $yaxis.css('float', "left");
+
+    $element.before(yaxis); // to set left of chart
 
 /** y axis labels **/
 
-    $element.before("<h2 class='with-y' id='yaxis'>y Axis (%)</h2>"); // to set left of chart
-    $('#yaxis').css('float', "left");
+    let yAxisTicks = newElement(div),
+        $yAxisTicks = $(yAxisTicks),
+        yscale = newElement(ul),
+        $yscale = $(yscale);
 
-    let yAxisTicks = document.createElement('div');
-    let $yAxisTicks = $(yAxisTicks);
     $yAxisTicks.attr("id", "axesYTicks");
-    let yscale = document.createElement("ul");
 
-        //find highest num in array for number of yticks:
-        //use es6 spread-syntax to sort without mutating original data:
+      //find highest num in array for number of yticks:
+      //use es6 spread-syntax to sort without mutating original data:
 
     let sortedData = [...data];
     sortedData.sort((a, b) => {return a - b;});
-    let adjustTicks = chartHeight/yAxisSteps;
-    let highestValue = sortedData[sortedData.length - 1];
 
-    for (let i = 0; i < highestValue; i++){
-        let ticks = "<p class='yticks' style='margin-bottom: " + adjustTicks + "'></p>";
-        $yAxisTicks.append(ticks);
-        $(yscale).append( "<li>" + (highestValue - i)*yAxisSteps + "</li>" );
-    }
+    let adjustTicks = chartHeight/yAxisSteps,
+        highestValue = sortedData[sortedData.length - 1];
+
+      for (let i = 0; i < highestValue; i++){
+          let ticks = newElement(p),
+              $ticks = $(ticks);
+
+              $ticks.addClass('yticks');
+              $ticks.css("margin-bottom", adjustTicks);
+
+          $yAxisTicks.append(ticks);
+
+          let scaleCount = (highestValue - i)*yAxisSteps;
+          let eachTick = newElement(li),
+              $eachTick = $(eachTick);
+
+              $eachTick.addClass(eachTick);
+              $eachTick.html( scaleCount );
+                // keep scales relative to ticks and root of chart
+              $eachTick.css('line-height', (adjustTicks + "px"));
+
+          $yscale.append(eachTick);
+      }
 
     $element.prepend(yAxisTicks);
-    $('.wrap-chart').wrapAll("<div class='chart-wrapper with-y' />");  // keep y axis relative to root
+
+    let chartWrap = newElement(div),
+        $chartWrap = $(chartWrap);
+
+        $chartWrap.addClass("chart-wrapper with-y");
+
+    $('.wrap-chart').wrapAll(chartWrap);  // keep y axis relative to root
     $('.chart-wrapper').prepend(yscale); // add scale to y axis
 
-        // keep scales relative to ticks and root of chart
-    $('li').css('line-height', (adjustTicks + "px"));
-
         //adjust margin by have the line-height for first tick
-    $('ul').css('margin-top', (Math.floor(adjustTicks/2) + "px"));
+    $yscale.css('margin-top', (Math.floor(adjustTicks/2) + "px"));
 
         //add same spacing to the starting point of the y axis yAxisTicks
         //subtract by approximate 1/2 px of the yaxis numbers from css
     $yAxisTicks.css('padding-bottom', ((adjustTicks/2) - (7) + "px"));
 
 
+
+/** x axis  **/
+    //add x axis title after yaxis and chart have been wrapped
+
+    let xaxis = newElement(h2),
+        $xaxis = $(xaxis);
+
+        $xaxis.attr("id", "xaxis");
+        $xaxis.html("x Axis");
+
 /** add axes to element **/
 
-      //add x axis title after yaxis and chart have been wrapped
-    $element.append("<h2 id='xaxis'>x Axis</h2>");
-    $('.with-y').wrapAll("<div class='chartWithY'></div>");
+  $element.append(xaxis);
 
-    let yaxisCentered = ($('#yaxis')[0].offsetHeight) / 2;
-    $('#yaxis').css('margin-top', yaxisCentered);
+  $('.with-y').wrapAll("<div class='chartWithY'></div>");
+
+  let yaxisCentered = ($yaxis[0].offsetHeight) / 2;
+
+      $yaxis.css('margin-top', yaxisCentered);
 
 
 return;
